@@ -1,0 +1,21 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100dvw;
+  height: 100dvh;
+  font-family: "Roboto", sans-serif;
+  background: linear-gradient(159deg, rgba(0,0,128,1) 0%, rgba(0,191,255,1) 100%);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+.btn {
+  margin: 1.5%;
+  padding: 1.5%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}

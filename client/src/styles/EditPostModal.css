@@ -1,0 +1,269 @@
+.edit-modal-content {
+  width: 90%;
+  max-width: calc(700px + 10vw);
+  max-height: calc(90vh);
+  background-color: rgb(255, 255, 255);
+  border-radius: calc(12px + 0.5vw);
+  box-shadow: 0 calc(10px + 1vw) calc(40px + 2vw) rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.edit-modal-header {
+  padding: calc(1.5rem + 0.5vw);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(0, 123, 255, 0.1);
+  background-color: rgba(248, 249, 250, 0.8);
+}
+
+.edit-modal-header h2 {
+  font-size: calc(1.5rem + 0.3vw);
+  margin: 0;
+  color: rgb(33, 37, 41);
+  font-weight: 600;
+}
+
+.edit-post-form {
+  padding: calc(2rem + 1vw);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.edit-post-form .form-group {
+  margin-bottom: calc(1.5rem + 0.3vw);
+}
+
+.edit-post-form .form-label {
+  display: block;
+  font-size: calc(0.95rem + 0.05vw);
+  font-weight: 600;
+  color: rgb(33, 37, 41);
+  margin-bottom: calc(0.5rem + 0.1vw);
+}
+
+.edit-post-form .form-input,
+.edit-post-form .form-textarea {
+  width: 100%;
+  padding: calc(0.75rem + 0.2vw);
+  border: 2px solid rgba(0, 123, 255, 0.2);
+  border-radius: calc(6px + 0.1vw);
+  font-size: calc(0.95rem + 0.05vw);
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: rgb(33, 37, 41);
+}
+
+.edit-post-form .form-input:focus,
+.edit-post-form .form-textarea:focus {
+  outline: none;
+  border-color: rgb(0, 123, 255);
+  box-shadow: 0 0 0 calc(3px + 0.1vw) rgba(0, 123, 255, 0.1);
+  background-color: rgb(255, 255, 255);
+}
+
+.edit-post-form .form-input.error,
+.edit-post-form .form-textarea.error {
+  border-color: rgb(220, 53, 69);
+  background-color: rgba(248, 215, 218, 0.3);
+}
+
+.edit-post-form .form-input.error:focus,
+.edit-post-form .form-textarea.error:focus {
+  border-color: rgb(220, 53, 69);
+  box-shadow: 0 0 0 calc(3px + 0.1vw) rgba(220, 53, 69, 0.1);
+}
+
+.edit-post-form .form-input:disabled,
+.edit-post-form .form-textarea:disabled {
+  background-color: rgba(233, 236, 239, 0.5);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.edit-post-form .form-textarea {
+  resize: vertical;
+  min-height: calc(200px + 5vw);
+  line-height: 1.6;
+}
+
+.edit-post-form .error-message {
+  font-size: calc(0.8rem + 0.05vw);
+  color: rgb(220, 53, 69);
+  margin-top: calc(0.25rem + 0.05vw);
+  display: flex;
+  align-items: center;
+  gap: calc(0.25rem + 0.05vw);
+}
+
+.edit-post-form .error-message::before {
+  content: "⚠️";
+  font-size: calc(0.85rem + 0.05vw);
+}
+
+.edit-post-form .character-count {
+  font-size: calc(0.75rem + 0.05vw);
+  color: rgba(33, 37, 41, 0.6);
+  margin-top: calc(0.25rem + 0.05vw);
+  text-align: right;
+}
+
+.edit-post-form .checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(0.5rem + 0.1vw);
+}
+
+.edit-post-form .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: calc(0.5rem + 0.1vw);
+  cursor: pointer;
+  font-size: calc(0.95rem + 0.05vw);
+}
+
+.edit-post-form .checkbox-input {
+  width: calc(18px + 0.2vw);
+  height: calc(18px + 0.2vw);
+  cursor: pointer;
+  accent-color: rgb(0, 123, 255);
+}
+
+.edit-post-form .checkbox-text {
+  font-weight: 500;
+  color: rgb(33, 37, 41);
+}
+
+.edit-post-form .checkbox-help {
+  font-size: calc(0.85rem + 0.05vw);
+  color: rgba(33, 37, 41, 0.7);
+  margin: 0;
+  font-style: italic;
+}
+
+.edit-post-form .submit-error {
+  padding: calc(0.75rem + 0.2vw);
+  background-color: rgba(248, 215, 218, 0.8);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  border-radius: calc(6px + 0.1vw);
+  color: rgb(114, 28, 36);
+  font-size: calc(0.9rem + 0.05vw);
+  text-align: center;
+  margin-bottom: calc(1rem + 0.2vw);
+}
+
+.edit-post-form .form-actions {
+  display: flex;
+  gap: calc(1rem + 0.2vw);
+  justify-content: flex-end;
+  padding-top: calc(1rem + 0.2vw);
+  border-top: 1px solid rgba(0, 123, 255, 0.1);
+  margin-top: calc(1rem + 0.2vw);
+}
+
+.edit-post-form .cancel-button,
+.edit-post-form .submit-button {
+  padding: calc(0.75rem + 0.2vw) calc(1.5rem + 0.3vw);
+  border: none;
+  border-radius: calc(6px + 0.1vw);
+  font-size: calc(0.9rem + 0.05vw);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: calc(0.5px + 0.02vw);
+  min-width: calc(100px + 1vw);
+}
+
+.edit-post-form .cancel-button {
+  background-color: rgba(108, 117, 125, 0.1);
+  color: rgb(108, 117, 125);
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.edit-post-form .cancel-button:hover:not(:disabled) {
+  background-color: rgba(108, 117, 125, 0.2);
+  transform: translateY(calc(-1px + -0.05vw));
+}
+
+.edit-post-form .submit-button {
+  background: linear-gradient(135deg, rgb(0, 123, 255) 0%, rgb(0, 86, 179) 100%);
+  color: rgb(255, 255, 255);
+}
+
+.edit-post-form .submit-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgb(0, 86, 179) 0%, rgb(0, 123, 255) 100%);
+  transform: translateY(calc(-2px + -0.1vw));
+  box-shadow: 0 calc(3px + 0.3vw) calc(10px + 0.5vw) rgba(0, 123, 255, 0.3);
+}
+
+.edit-post-form .submit-button:disabled,
+.edit-post-form .cancel-button:disabled {
+  background: rgba(108, 117, 125, 0.6);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  border: none;
+}
+
+.edit-post-form .submit-button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.edit-post-form .submit-button.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(16px + 0.2vw);
+  height: calc(16px + 0.2vw);
+  margin: calc(-8px + -0.1vw) 0 0 calc(-8px + -0.1vw);
+  border: calc(2px + 0.05vw) solid transparent;
+  border-top: calc(2px + 0.05vw) solid rgb(255, 255, 255);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+@media (orientation: portrait) {
+  .edit-modal-content {
+    max-height: 95vh;
+    margin: calc(1rem + 0.5vw);
+  }
+
+  .edit-post-form {
+    padding: calc(1.5rem + 0.5vw);
+  }
+
+  .edit-modal-header {
+    padding: calc(1rem + 0.3vw);
+  }
+
+  .edit-modal-header h2 {
+    font-size: calc(1.3rem + 0.2vw);
+  }
+
+  .edit-post-form .form-textarea {
+    min-height: calc(150px + 3vw);
+  }
+
+  .edit-post-form .form-actions {
+    flex-direction: column;
+    gap: calc(0.75rem + 0.1vw);
+  }
+
+  .edit-post-form .cancel-button,
+  .edit-post-form .submit-button {
+    width: 100%;
+  }
+}

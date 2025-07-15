@@ -1,0 +1,142 @@
+.header {
+  background-color: rgba(0,0,128, 0.7);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  top: 0;
+  z-index: 10;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 calc(1.5rem + 2vw);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: calc(1.2rem + .5vw);
+  margin: 0;
+}
+
+.title a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: bold;
+}
+
+.title a:hover {
+  color: rgb(100, 181, 246);
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: calc(1rem + 1vw);
+  align-items: center;
+}
+
+.navbar-list li {
+  position: relative;
+}
+
+.navbar-list a,
+.username {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-size: calc(0.9rem + 0.2vw);
+  padding: calc(0.8rem + 0.2vw) 0;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.navbar-list a:hover,
+.username:hover {
+  color: rgb(100, 181, 246);
+}
+
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.username {
+  font-weight: bolder;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.username::after {
+  content: "▼";
+  font-size: calc(.7em + 1vw);
+  transition: transform 0.3s ease;
+}
+
+.user-menu:hover .username::after {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  min-width: 100px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 0.5rem 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: dropdownFade 0.3s ease forwards;
+}
+
+@keyframes dropdownFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logout-button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  font-size: calc(0.9rem + 0.1vw);
+  color: rgb(41, 41, 41);
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(100, 181, 246, 0.1);
+  color: rgb(16, 135, 232);
+}
+
+
+@media (orientation: portrait) {
+  .header-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .navbar-list {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+  }
+}

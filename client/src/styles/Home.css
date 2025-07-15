@@ -1,0 +1,205 @@
+.home-container {
+  width: 90%;
+  max-width: calc(1200px + 10vw);
+  min-height: calc(100vh - 200px);
+  margin: 0 auto;
+  padding: calc(2rem + 2vw);
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: calc(3rem + 2vw);
+  padding: calc(2rem + 1vw) 0;
+}
+
+.home-header h1 {
+  font-size: calc(2.5rem + 1vw);
+  margin: 0 0 calc(1rem + 0.5vw) 0;
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  text-shadow: 0 calc(2px + 0.2vw) calc(4px + 0.2vw) rgba(0, 0, 0, 0.3);
+}
+
+.home-header p {
+  font-size: calc(1.2rem + 0.3vw);
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 300;
+}
+
+.error-banner {
+  width: 100%;
+  padding: calc(1rem + 0.5vw);
+  background-color: rgba(248, 215, 218, 0.9);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  border-radius: calc(8px + 0.2vw);
+  margin-bottom: calc(2rem + 1vw);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc(1rem + 0.2vw);
+}
+
+.error-banner p {
+  font-size: calc(1rem + 0.1vw);
+  margin: 0;
+  color: rgb(114, 28, 36);
+  flex: 1;
+}
+
+.retry-button {
+  padding: calc(0.5rem + 0.2vw) calc(1rem + 0.3vw);
+  background-color: rgb(220, 53, 69);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: calc(4px + 0.1vw);
+  font-size: calc(0.9rem + 0.05vw);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.retry-button:hover {
+  background-color: rgb(200, 35, 51);
+}
+
+.no-posts {
+  width: 100%;
+  min-height: calc(400px + 10vw);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.no-posts-content {
+  max-width: calc(500px + 5vw);
+  padding: calc(3rem + 2vw);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: calc(16px + 0.5vw);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.no-posts-content h2 {
+  font-size: calc(2rem + 0.5vw);
+  margin: 0 0 calc(1rem + 0.3vw) 0;
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+}
+
+.no-posts-content p {
+  font-size: calc(1.1rem + 0.2vw);
+  margin: 0 0 calc(2rem + 0.5vw) 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(350px + 5vw), 1fr));
+  gap: calc(2rem + 1vw);
+  margin-bottom: calc(4rem + 2vw);
+}
+
+.home-cta {
+  width: 100%;
+  padding: calc(4rem + 2vw) 0;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
+  border-radius: calc(16px + 0.5vw);
+  margin-top: calc(4rem + 2vw);
+}
+
+.cta-content {
+  max-width: calc(600px + 5vw);
+  margin: 0 auto;
+  padding: 0 calc(1rem + 1vw);
+}
+
+.cta-content h2 {
+  font-size: calc(2rem + 0.5vw);
+  margin: 0 0 calc(1rem + 0.3vw) 0;
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+}
+
+.cta-content p {
+  font-size: calc(1.1rem + 0.2vw);
+  margin: 0 0 calc(2rem + 0.5vw) 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cta-buttons {
+  display: flex;
+  gap: calc(1rem + 0.5vw);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-button {
+  padding: calc(1rem + 0.3vw) calc(2rem + 0.5vw);
+  border-radius: calc(8px + 0.2vw);
+  font-size: calc(1rem + 0.1vw);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: calc(0.5px + 0.05vw);
+  cursor: pointer;
+  border: calc(2px + 0.1vw) solid transparent;
+}
+
+.cta-button.primary {
+  background: linear-gradient(135deg, rgb(0, 123, 255) 0%, rgb(0, 86, 179) 100%);
+  color: rgb(255, 255, 255);
+}
+
+.cta-button.primary:hover {
+  background: linear-gradient(135deg, rgb(0, 86, 179) 0%, rgb(0, 123, 255) 100%);
+  transform: translateY(calc(-2px + -0.1vw));
+  box-shadow: 0 calc(4px + 0.5vw) calc(15px + 1vw) rgba(0, 123, 255, 0.3);
+}
+
+.cta-button.secondary {
+  background-color: transparent;
+  color: rgb(255, 255, 255);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.cta-button.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgb(255, 255, 255);
+  transform: translateY(calc(-2px + -0.1vw));
+}
+
+
+@media (orientation: portrait) {
+  .home-container {
+    padding: calc(1rem + 1vw);
+  }
+
+  .home-header {
+    margin-bottom: calc(2rem + 1vw);
+    padding: calc(1.5rem + 0.5vw) 0;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: calc(1.5rem + 0.5vw);
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-button {
+    width: 100%;
+    max-width: calc(250px + 5vw);
+  }
+
+  .error-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

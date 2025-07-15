@@ -1,0 +1,111 @@
+.loading-container {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: calc(3rem + 2vw);
+  text-align: center;
+}
+
+.loading-container.small {
+  padding: calc(1rem + 0.5vw);
+}
+
+.loading-container.medium {
+  padding: calc(2rem + 1vw);
+}
+
+.loading-container.large {
+  padding: calc(4rem + 3vw);
+  min-height: calc(300px + 10vw);
+}
+
+.spinner {
+  border-radius: 50%;
+  border-style: solid;
+  border-color: transparent;
+  border-top-color: rgb(0, 123, 255);
+  animation: spin 1s linear infinite;
+}
+
+.small .spinner {
+  width: calc(20px + 0.5vw);
+  height: calc(20px + 0.5vw);
+  border-width: calc(2px + 0.1vw);
+}
+
+.medium .spinner {
+  width: calc(40px + 1vw);
+  height: calc(40px + 1vw);
+  border-width: calc(4px + 0.2vw);
+}
+
+.large .spinner {
+  width: calc(60px + 2vw);
+  height: calc(60px + 2vw);
+  border-width: calc(6px + 0.3vw);
+}
+
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg); 
+  }
+  100% { 
+    transform: rotate(360deg); 
+  }
+}
+
+.loading-message {
+  margin: calc(1rem + 0.3vw) 0 0 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.small .loading-message {
+  font-size: calc(0.8rem + 0.05vw);
+}
+
+.medium .loading-message {
+  font-size: calc(1rem + 0.1vw);
+}
+
+.large .loading-message {
+  font-size: calc(1.2rem + 0.2vw);
+}
+
+/* Alternative spinner for dark backgrounds */
+.loading-container.dark .spinner {
+  border-top-color: rgb(255, 255, 255);
+}
+
+.loading-container.dark .loading-message {
+  color: rgb(255, 255, 255);
+}
+
+/* Pulsing animation variant */
+.loading-container.pulse .spinner {
+  animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
+  border-top-color: rgb(0, 123, 255);
+  border-right-color: rgba(0, 123, 255, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.5; 
+  }
+}
+
+
+@media (orientation: portrait) {
+  .loading-container {
+    padding: calc(2rem + 1vw);
+  }
+
+  .loading-container.large {
+    min-height: calc(200px + 5vw);
+  }
+}
