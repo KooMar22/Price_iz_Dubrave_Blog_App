@@ -134,7 +134,7 @@ const EditPostModal = ({ post, onClose, onPostUpdated }) => {
               value={formData.title}
               onChange={handleChange}
               className={`form-input ${errors.title ? "error" : ""}`}
-              placeholder="Enter post title..."
+              placeholder="Unesite naslov priče"
               disabled={loading}
               maxLength={200}
               required
@@ -158,7 +158,7 @@ const EditPostModal = ({ post, onClose, onPostUpdated }) => {
               value={formData.content}
               onChange={handleChange}
               className={`form-textarea ${errors.content ? "error" : ""}`}
-              placeholder="Write your post content..."
+              placeholder="Upišite sadržaj vaše priče..."
               disabled={loading}
               rows={12}
               maxLength={5000}

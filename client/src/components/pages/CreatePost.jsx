@@ -129,7 +129,7 @@ const CreatePost = () => {
             value={formData.title}
             onChange={handleChange}
             className={`form-input ${errors.title ? "error" : ""}`}
-            placeholder="Enter an engaging title..."
+            placeholder="Unesite zanimljivi naslov..."
             disabled={loading}
             maxLength={200}
             required
@@ -153,7 +153,7 @@ const CreatePost = () => {
             value={formData.content}
             onChange={handleChange}
             className={`form-textarea ${errors.content ? "error" : ""}`}
-            placeholder="Write your post content here..."
+            placeholder="Unesite sadržaj vaše priče..."
             disabled={loading}
             rows={15}
             maxLength={5000}
@@ -198,7 +198,7 @@ const CreatePost = () => {
             className="cancel-button"
             disabled={loading}
           >
-            Cancel
+            Odustani
           </button>
 
           <button

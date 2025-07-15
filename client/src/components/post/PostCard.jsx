@@ -58,7 +58,7 @@ const PostCard = ({ post, onUpdate, onDelete, showAdminActions = false }) => {
 
         <div className="post-card-footer">
           <button onClick={handleReadMore} className="read-more-button">
-            Read More
+            Pročitajte više
           </button>
 
           {canEdit && showAdminActions && (
