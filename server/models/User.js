@@ -30,19 +30,30 @@ class User {
   // Create a new user
   static async create(userData) {
     try {
-      const { username, password } = userData;
+      const { username, email, password } = userData;
 
       // Check if user already exists
-      const existingUser = await prisma.user.findUnique({
-        where: { username },
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          OR: [{ username }, { email }],
+        },
       });
 
       if (existingUser) {
-        throw new CustomError(
-          "User already exists",
-          409,
-          "Username is already taken"
-        );
+        if (existingUser.username === username) {
+          throw new CustomError(
+            "User already exists",
+            409,
+            "Username is already taken"
+          );
+        }
+        if (existingUser.email === email) {
+          throw new CustomError(
+            "User already exists",
+            409,
+            "Email is already registered"
+          );
+        }
       }
 
       // Hash password
@@ -52,6 +63,7 @@ class User {
       const user = await prisma.user.create({
         data: {
           username,
+          email,
           password: hashedPassword,
         },
       });
@@ -74,6 +86,23 @@ class User {
     try {
       const user = await prisma.user.findUnique({
         where: { username },
+      });
+
+      return user ? new User(user) : null;
+    } catch (error) {
+      throw new CustomError(
+        "Failed to find user",
+        500,
+        "Database error occurred"
+      );
+    }
+  }
+
+  // Find user by email
+  static async findByEmail(email) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { email },
       });
 
       return user ? new User(user) : null;
@@ -210,6 +239,117 @@ class User {
     }
   }
 
+  // Generate reset token
+  static async generateResetToken(email) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        // Don't reveal if email exists
+        return null;
+      }
+
+      // Generate random token
+      const resetToken = crypto.randomBytes(32).toString("hex");
+
+      // Hash token for storage
+      const tokenHash = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+
+      // Calculate expiry
+      const expiresAt = new Date(
+        Date.now() +
+          parseJWTExpiry(process.env.AUTH_RESET_TOKEN_EXPIRY || "15m")
+      );
+
+      // Delete any existing reset tokens for this user
+      await prisma.resetToken.deleteMany({
+        where: { userId: user.id },
+      });
+
+      // Save new reset token
+      await prisma.resetToken.create({
+        data: {
+          token: tokenHash,
+          userId: user.id,
+          expiresAt,
+        },
+      });
+
+      return {
+        token: resetToken,
+        user: new User(user),
+      };
+    } catch (error) {
+      throw new CustomError(
+        "Failed to generate reset token",
+        500,
+        "Database error occurred"
+      );
+    }
+  }
+
+  // Verify reset token and update password
+  static async resetPassword(token, newPassword) {
+    try {
+      // Hash the token to match storage
+      const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+      // Find valid reset token
+      const resetToken = await prisma.resetToken.findFirst({
+        where: {
+          token: tokenHash,
+          expiresAt: {
+            gt: new Date(),
+          },
+        },
+        include: { user: true },
+      });
+
+      if (!resetToken) {
+        throw new CustomError(
+          "Invalid or expired reset token",
+          400,
+          "Reset token is invalid or has expired"
+        );
+      }
+
+      // Hash new password
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+      // Update user password
+      await prisma.user.update({
+        where: { id: resetToken.user.id },
+        data: { password: hashedPassword },
+      });
+
+      // Delete used reset token
+      await prisma.resetToken.delete({
+        where: { id: resetToken.id },
+      });
+
+      // Also delete all refresh tokens to force re-login
+      await prisma.refreshToken.deleteMany({
+        where: { userId: resetToken.user.id },
+      });
+
+      return new User(resetToken.user);
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw new CustomError(
+        "Failed to reset password",
+        500,
+        "Database error occurred"
+      );
+    }
+  }
+
   /*
   INSTANCE METHODS
   */
@@ -269,6 +409,7 @@ class User {
     return {
       id: this.id,
       username: this.username,
+      email: this.email,
       isAdmin: this.isAdmin,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

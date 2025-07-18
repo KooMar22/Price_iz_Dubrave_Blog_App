@@ -1,24 +1,31 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/authContext";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import authAPI from "../../api/authAPI";
 import "../../styles/Auth.css";
 
-const Register = () => {
+const ResetPassword = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
     password: "",
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { register } = useAuth();
-  const navigate = useNavigate();
+  const token = searchParams.get("token");
 
-  // Handle input changes
+  useEffect(() => {
+    // If no token in URL, redirect to forgot password
+    if (!token) {
+      navigate("/forgot-password");
+    }
+  }, [token, navigate]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -35,26 +42,9 @@ const Register = () => {
     }
   };
 
-  // Validate form
   const validateForm = () => {
     const newErrors = {};
 
-    // Username validation
-    if (!formData.username.trim()) {
-      newErrors.username = "Potrebno je unijeti korisničko ime";
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(formData.username)) {
-      newErrors.username =
-        "Korisničko ime može sadržavati samo slova, brojeve, _ i -";
-    }
-
-    // Email validation
-    if (!formData.email.trim()) {
-      newErrors.email = "Potrebno je unijeti email adresu";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email adresa nije u ispravnom formatu";
-    }
-
-    // Password validation
     if (!formData.password) {
       newErrors.password = "Potrebno je unijeti lozinku";
     } else if (formData.password.length < 6) {
@@ -63,7 +53,6 @@ const Register = () => {
       newErrors.password = "Lozinka mora sadržavati najmanje 1 slovo i 1 broj";
     }
 
-    // Confirm password validation
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Potvrdite lozinku";
     } else if (formData.password !== formData.confirmPassword) {
@@ -74,7 +63,6 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -85,83 +73,63 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const result = await register(
-        formData.username,
-        formData.email,
-        formData.password
+      const result = await authAPI.resetPassword(
+        token,
+        formData.password,
+        formData.confirmPassword
       );
 
       if (result.success) {
-        navigate("/posts");
+        setSuccess(true);
       } else {
-        setErrors({ submit: result.message });
+        setErrors({
+          submit: result.error || "Dogodila se greška pri resetiranju lozinke.",
+        });
       }
-    } catch (error) {
-      console.error(`Registration error: ${error}`);
-      setErrors({ submit: "Dogodila se neočekivana pogreška" });
+    } catch (err) {
+      console.error("Reset password error:", err);
+      setErrors({ submit: "Link je istekao ili nije valjan. Zatražite novi." });
     } finally {
       setLoading(false);
     }
   };
 
+  if (success) {
+    return (
+      <div className="auth-container">
+        <div className="auth-card">
+          <div className="auth-header">
+            <h2>Lozinka uspješno resetirana! ✅</h2>
+            <p>Vaša lozinka je uspješno promijenjena</p>
+          </div>
+
+          <div className="success-message">
+            <p>Sada se možete prijaviti s vašom novom lozinkom.</p>
+          </div>
+
+          <Link
+            to="/login"
+            className="auth-button"
+          >
+            Idite na prijavu
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h2>Kreirajte korisnički račun</h2>
-          <p>Pridružite se Pričama iz Dubrave</p>
+          <h2>Resetirajte lozinku</h2>
+          <p>Unesite novu lozinku za Vaš korisnički račun</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="username" className="form-label">
-              Korisničko ime
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className={`form-input ${errors.username ? "error" : ""}`}
-              placeholder="Odaberite korisničko ime"
-              disabled={loading}
-              required
-            />
-            {errors.username && (
-              <span className="error-message">{errors.username}</span>
-            )}
-            <span className="input-hint">
-              Moguće je unijeti samo slova i brojeve
-            </span>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              E-Mail
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`form-input ${errors.email ? "error" : ""}`}
-              placeholder="Unesite e-mail"
-              disabled={loading}
-              required
-            />
-            {errors.email && (
-              <span className="error-message">{errors.email}</span>
-            )}
-            <span className="input-hint">
-              Potrebno je unijeti valjani e-mail - npr. mail@domena.com
-            </span>
-          </div>
-
-          <div className="form-group">
             <label htmlFor="password" className="form-label">
-              Lozinka
+              Nova lozinka
             </label>
             <div className="password-input-wrapper">
               <input
@@ -171,7 +139,7 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className={`form-input ${errors.password ? "error" : ""}`}
-                placeholder="Kreirajte lozinku"
+                placeholder="Unesite novu lozinku"
                 disabled={loading}
                 required
               />
@@ -195,7 +163,7 @@ const Register = () => {
 
           <div className="form-group">
             <label htmlFor="confirmPassword" className="form-label">
-              Potvrdite lozinku
+              Potvrdite novu lozinku
             </label>
             <div className="password-input-wrapper">
               <input
@@ -207,7 +175,7 @@ const Register = () => {
                 className={`form-input ${
                   errors.confirmPassword ? "error" : ""
                 }`}
-                placeholder="Potvrdite lozinku"
+                placeholder="Potvrdite novu lozinku"
                 disabled={loading}
                 required
               />
@@ -232,17 +200,14 @@ const Register = () => {
             className={`auth-button ${loading ? "loading" : ""}`}
             disabled={loading}
           >
-            {loading
-              ? "Kreiramo korisnički račun..."
-              : "Kreirajte korisnički račun"}
+            {loading ? "Resetiranje..." : "Resetirajte lozinku"}
           </button>
         </form>
 
         <div className="auth-footer">
           <p>
-            Već imate korisnički račun?{" "}
             <Link to="/login" className="auth-link">
-              Prijavite se
+              Natrag na prijavu
             </Link>
           </p>
         </div>
@@ -251,4 +216,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ResetPassword;

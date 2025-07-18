@@ -9,6 +9,10 @@
 
 .auth-card {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   max-width: calc(400px + 3vw);
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: calc(12px + 0.5vw);
@@ -149,7 +153,6 @@
 }
 
 .auth-button {
-  width: 100%;
   padding: calc(1rem + 0.25vw) calc(1.5rem + 0.5vw);
   background: linear-gradient(135deg, rgb(0, 123, 255) 0%, rgb(0, 86, 179) 100%);
   color: rgb(255, 255, 255);
@@ -161,6 +164,7 @@
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: calc(0.5px + 0.05vw);
+  text-decoration: none;
 }
 
 .auth-button:hover:not(:disabled) {
@@ -230,7 +234,32 @@
   text-decoration: underline;
 }
 
-/* Responsive Design */
+
+.success-message {
+  padding: calc(1.5rem + 0.5vw);
+  background-color: rgba(212, 237, 218, 0.8);
+  border: 1px solid rgba(40, 167, 69, 0.3);
+  border-radius: calc(8px + 0.2vw);
+  margin: calc(1.5rem + 0.5vw) 0;
+  text-align: center;
+}
+
+.success-message p {
+  font-size: calc(1rem + 0.05vw);
+  color: rgb(21, 87, 36);
+  margin: 0 0 calc(0.75rem + 0.2vw) 0;
+}
+
+.success-message p:last-child {
+  margin-bottom: 0;
+}
+
+.success-message strong {
+  color: rgb(15, 61, 25);
+  font-weight: 600;
+}
+
+
 @media (orientation: portrait) {
   .auth-container {
     padding: calc(1rem + 1vw);

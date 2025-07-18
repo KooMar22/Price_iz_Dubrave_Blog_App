@@ -5,6 +5,7 @@ import authAPI from "../../api/authAPI";
 import PostCard from "../post/PostCard";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import EditPostModal from "../modals/EditPostModal";
+import DeleteConfirmationModal from "../modals/DeleteConfirmationModal";
 import "../../styles/Dashboard.css";
 
 const Dashboard = () => {
@@ -12,8 +13,10 @@ const Dashboard = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [filter, setFilter] = useState("all"); 
+  const [filter, setFilter] = useState("all");
   const [editingPost, setEditingPost] = useState(null);
+  const [deletingPost, setDeletingPost] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch posts function (extracted so it can be reused)
   const fetchPosts = useCallback(async () => {
@@ -85,23 +88,32 @@ const Dashboard = () => {
     setEditingPost(post);
   };
 
-  // Handle post deletion
-  const handleDeletePost = async (post) => {
-    if (!window.confirm(`Jeste li sigurni da želite izbrisati "${post.title}"?`)) {
-      return;
-    }
+  // Handle post deletion request
+  const handleDeletePost = (post) => {
+    setDeletingPost(post);
+  };
+
+  // Confirm deletion
+  const confirmDeletePost = async () => {
+    if (!deletingPost) return;
+
+    setIsDeleting(true);
 
     try {
-      const result = await authAPI.deletePost(post.id);
+      const result = await authAPI.deletePost(deletingPost.id);
 
       if (result.success) {
-        setPosts((prev) => prev.filter((p) => p.id !== post.id));
+        setPosts((prev) => prev.filter((p) => p.id !== deletingPost.id));
+        setDeletingPost(null);
       } else {
         setError("Failed to delete post");
       }
     } catch (err) {
       console.error(`Error deleting post: ${err}`);
       setError("Failed to delete post");
+    } finally {
+      setIsDeleting(false);
+      setDeletingPost(null);
     }
   };
 
@@ -135,7 +147,12 @@ const Dashboard = () => {
   const filteredPosts = getFilteredPosts();
 
   if (loading) {
-    return <LoadingSpinner size="large" message="Učitavamo vašu upravljačku ploču..." />;
+    return (
+      <LoadingSpinner
+        size="large"
+        message="Učitavamo Vašu upravljačku ploču..."
+      />
+    );
   }
 
   return (
@@ -306,6 +323,16 @@ const Dashboard = () => {
           onPostUpdated={handlePostUpdated}
         />
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={!!deletingPost}
+        onClose={() => setDeletingPost(null)}
+        onConfirm={confirmDeletePost}
+        title="Izbrišite priču"
+        message={`Jeste li sigurni da želite izbrisati "${deletingPost?.title}"? Kada izbrišete, nema više povratka.`}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 };

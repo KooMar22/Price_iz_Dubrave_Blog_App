@@ -1,4 +1,4 @@
-import { loginValidator, registerValidator } from "./auth-validators.js";
+import { loginValidator, registerValidator, forgotPasswordValidator, resetPasswordValidator } from "./auth-validators.js";
 import { fetchUserProfileValidator } from "./user-validators.js";
 import {
   createPostValidator,
@@ -15,6 +15,8 @@ import {
 export {
   loginValidator,
   registerValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator,
   fetchUserProfileValidator,
   createPostValidator,
   updatePostValidator,

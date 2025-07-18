@@ -4,6 +4,8 @@ import {
   loginValidator,
   registerValidator,
   fetchUserProfileValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator,
 } from "../validators/index.js";
 import {
   login,
@@ -13,6 +15,8 @@ import {
   refreshAccessToken,
   fetchUserProfile,
   fetchAuthUserProfile,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/user/index.js";
 
 const router = Router();
@@ -23,6 +27,10 @@ router.post("/register", registerValidator, register);
 router.post("/logout", requireAuthentication, logout);
 router.post("/master-logout", requireAuthentication, logoutAllDevices);
 router.post("/reauth", refreshAccessToken);
+
+// Password reset routes
+router.post("/forgot-password", forgotPasswordValidator, forgotPassword);
+router.post("/reset-password", resetPasswordValidator, resetPassword);
 
 // User profile routes
 router.get("/me", requireAuthentication, fetchAuthUserProfile);

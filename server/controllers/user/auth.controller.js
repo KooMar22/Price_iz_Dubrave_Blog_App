@@ -5,6 +5,10 @@ import User from "../../models/User.js";
 import CustomError from "../../config/errors/CustomError.js";
 import AuthorizationError from "../../config/errors/AuthorizationError.js";
 import { parseJWTExpiry } from "../../utils/time.js";
+import {
+  sendPasswordResetEmail,
+  sendPasswordResetConfirmationEmail,
+} from "../../services/email.service.js";
 
 const prisma = new PrismaClient();
 
@@ -89,8 +93,8 @@ const register = async (req, res, next) => {
       throw new CustomError(errors.array(), 422, errors.array()[0].msg);
     }
 
-    const { username, password } = req.body;
-    const newUser = await User.create({ username, password });
+    const { username, email, password } = req.body;
+    const newUser = await User.create({ username, email, password });
     const accessToken = newUser.generateAccessToken();
     const refreshToken = newUser.generateRefreshToken();
 
@@ -252,4 +256,87 @@ const refreshAccessToken = async (req, res, next) => {
   }
 };
 
-export { login, register, logout, logoutAllDevices, refreshAccessToken };
+/*
+  6. FORGOT PASSWORD - Request Reset
+*/
+const forgotPassword = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new CustomError(errors.array(), 422, errors.array()[0]?.msg);
+    }
+
+    const { email } = req.body;
+
+    // Generate reset token
+    const result = await User.generateResetToken(email);
+
+    // Always return success to prevent email enumeration
+    if (result) {
+      // Send reset email
+      try {
+        await sendPasswordResetEmail(
+          result.user.email,
+          result.token,
+          result.user.username
+        );
+      } catch (emailError) {
+        console.error("Failed to send reset email:", emailError);
+      }
+    }
+
+    // Always return the same response
+    res.json({
+      success: true,
+      message:
+        "If an account with that email exists, a password reset link has been sent.",
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+/*
+  7. RESET PASSWORD - Confirm Reset
+*/
+const resetPassword = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new CustomError(errors.array(), 422, errors.array()[0]?.msg);
+    }
+
+    const { token, password } = req.body;
+
+    // Reset password
+    const user = await User.resetPassword(token, password);
+
+    // Send confirmation email
+    try {
+      await sendPasswordResetConfirmationEmail(user.email, user.username);
+    } catch (emailError) {
+      console.error("Failed to send confirmation email:", emailError);
+      // Don't fail the request if email fails
+    }
+
+    res.json({
+      success: true,
+      message:
+        "Your password has been successfully reset. You can now log in with your new password.",
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export {
+  login,
+  register,
+  logout,
+  logoutAllDevices,
+  refreshAccessToken,
+  forgotPassword,
+  resetPassword,
+};

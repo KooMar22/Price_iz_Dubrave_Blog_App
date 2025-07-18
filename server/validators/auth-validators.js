@@ -1,33 +1,40 @@
 import { body } from "express-validator";
-import User from "../models/User.js";
 
+// Login validator
 const loginValidator = [
-  body("username").trim().notEmpty().withMessage("Username can't be empty"),
-
-  body("password").notEmpty().withMessage("Password can't be empty"),
+  body("username")
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required")
+    .bail()
+    .isLength({ min: 3 })
+    .withMessage("Username must be at least 3 characters long"),
+  body("password").notEmpty().withMessage("Password is required"),
 ];
 
+// Register validator - now includes email
 const registerValidator = [
   body("username")
     .trim()
     .notEmpty()
-    .withMessage("Username can't be empty")
+    .withMessage("Username is required")
+    .bail()
+    .isLength({ min: 3, max: 30 })
+    .withMessage("Username must be between 3 and 30 characters")
     .bail()
     .isAlphanumeric()
-    .withMessage("Username may contain only letters and numbers")
-    .bail()
-    .custom(async (username) => {
-      // Finding if user exists in database
-      const userExists = await User.findByUsername(username);
-      if (userExists) {
-        throw new Error("Sorry, this username already exists");
-      }
-    }),
-
-  body("password")
+    .withMessage("Username can only contain letters and numbers"),
+  body("email")
     .trim()
     .notEmpty()
-    .withMessage("Password can't be empty")
+    .withMessage("Email is required")
+    .bail()
+    .isEmail()
+    .withMessage("Please provide a valid email address")
+    .normalizeEmail(),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
     .bail()
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long")
@@ -36,4 +43,47 @@ const registerValidator = [
     .withMessage("Password must contain at least one letter and one number"),
 ];
 
-export { loginValidator, registerValidator };
+// Forgot password validator
+const forgotPasswordValidator = [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required")
+    .bail()
+    .isEmail()
+    .withMessage("Please provide a valid email address")
+    .normalizeEmail(),
+];
+
+// Reset password validator
+const resetPasswordValidator = [
+  body("token")
+    .trim()
+    .notEmpty()
+    .withMessage("Reset token is required")
+    .bail()
+    .isLength({ min: 64, max: 64 })
+    .withMessage("Invalid reset token format"),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .bail()
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long")
+    .bail()
+    .matches(/^(?=.*[A-Za-z])(?=.*\d)/)
+    .withMessage("Password must contain at least one letter and one number"),
+  body("confirmPassword")
+    .notEmpty()
+    .withMessage("Password confirmation is required")
+    .bail()
+    .custom((value, { req }) => value === req.body.password)
+    .withMessage("Passwords do not match"),
+];
+
+export {
+  loginValidator,
+  registerValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator,
+};

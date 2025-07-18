@@ -175,10 +175,10 @@ class AuthAPI {
   }
 
   // Register user
-  async register(username, password) {
+  async register(username, email, password) {
     const result = await this.makeRequest("/users/register", {
       method: "POST",
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, email, password }),
     });
 
     if (result.success && result.data.accessToken) {
@@ -225,6 +225,22 @@ class AuthAPI {
     }
 
     return result;
+  }
+
+  // Forgot password - request reset link
+  async forgotPassword(email) {
+    return this.makeRequest("/users/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  // Reset password with token
+  async resetPassword(token, password, confirmPassword) {
+    return this.makeRequest("/users/reset-password", {
+      method: "POST",
+      body: JSON.stringify({ token, password, confirmPassword }),
+    });
   }
 
   // Get current user profile

@@ -5,7 +5,6 @@ import { AUTH_CONFIG } from "../config/auth.js";
 
 const AuthContext = createContext();
 
-
 const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -13,7 +12,6 @@ const useAuth = () => {
   }
   return context;
 };
-
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -107,9 +105,9 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   // Register
-  const register = async (username, password) => {
+  const register = async (username, email, password) => {
     try {
-      const result = await authAPI.register(username, password);
+      const result = await authAPI.register(username, email, password);
 
       if (result.success) {
         const { user } = result.data;

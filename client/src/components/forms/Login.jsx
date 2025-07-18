@@ -103,7 +103,6 @@ const Login = () => {
             )}
           </div>
 
-
           <div className="form-group">
             <label htmlFor="password" className="form-label">
               Lozinka
@@ -153,6 +152,11 @@ const Login = () => {
             <Link to="/register" className="auth-link">
               Registrirajte se
             </Link>
+          </p>
+          <br />
+          <p>
+            Zaboravili ste lozinku?{" "}
+            <Link to="/forgot-password" className="auth-link">Resetirajte lozinku</Link>
           </p>
         </div>
       </div>

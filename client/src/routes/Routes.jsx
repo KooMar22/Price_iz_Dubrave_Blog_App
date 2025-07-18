@@ -5,6 +5,8 @@ import Dashboard from "../components/pages/DashBoard";
 import CreatePost from "../components/pages/CreatePost";
 import Register from "../components/forms/Register";
 import Login from "../components/forms/Login";
+import ForgotPassword from "../components/forms/ForgotPassword";
+import ResetPassword from "../components/forms/ResetPassword";
 import { useAuth } from "../context/authContext";
 import PropTypes from "prop-types";
 
@@ -56,6 +58,22 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "forgot-password",
+        element: (
+          <PublicRoute>
+            <ForgotPassword />
+          </PublicRoute>
+        ),
+      },
+      {
+        path: "reset-password",
+        element: (
+          <PublicRoute>
+            <ResetPassword />
+          </PublicRoute>
+        ),
+      },
+      {
         path: "posts",
         element: (
           <ProtectedRoute>
@@ -74,7 +92,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
 
 ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
