@@ -24,35 +24,29 @@ const Dashboard = () => {
       setLoading(true);
       let allPosts = [];
 
-      // If admin, get ALL posts (including all drafts)
+      // If admin, get ALL posts (including all drafts from all users)
       if (user?.isAdmin) {
         const adminResult = await authAPI.getAllPosts();
         if (adminResult.success) {
           allPosts = adminResult.data.posts;
         }
       } else {
-        // For regular users: get published posts + their own drafts
+        // For regular users: get their own posts (includes drafts) + other published posts
 
-        // First get all published posts
-        const publishedResult = await authAPI.getPublishedPosts();
-        if (publishedResult.success) {
-          allPosts = [...publishedResult.data.posts];
+        // Get user's own posts (includes their drafts)
+        const myPostsResult = await authAPI.getMyPosts();
+        if (myPostsResult.success) {
+          allPosts = [...myPostsResult.data.posts];
         }
 
-        // Then get all posts to find user's drafts
-        try {
-          const allPostsResult = await authAPI.getAllPosts();
-          if (allPostsResult.success) {
-            // Get user's own drafts only
-            const userDrafts = allPostsResult.data.posts.filter(
-              (post) => post.userId === user.id && !post.isPosted
-            );
-
-            // Add user's drafts to the list
-            allPosts = [...allPosts, ...userDrafts];
-          }
-        } catch (err) {
-          console.error(`Error fetching user drafts: ${err}`);
+        // Get all published posts to see others' posts
+        const publishedResult = await authAPI.getPublishedPosts();
+        if (publishedResult.success) {
+          // Filter out user's own posts to avoid duplicates
+          const otherPublishedPosts = publishedResult.data.posts.filter(
+            (post) => post.userId !== user.id
+          );
+          allPosts = [...allPosts, ...otherPublishedPosts];
         }
       }
 
