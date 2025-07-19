@@ -163,7 +163,7 @@ class AuthAPI {
         result = await this.makeRequest(endpoint, {
           ...options,
           headers: newHeaders,
-          _isRetry: true, // Try to prevent infinite retry loop
+          _isRetry: true, // Prevent infinite retry loop
         });
       } else {
         console.log("Token refresh failed, user needs to log in again");
@@ -260,7 +260,23 @@ class AuthAPI {
 
   // Get single post
   async getPost(postId) {
+    // Try authenticated request first if user is logged in
+    const token = this.getAccessToken();
+    if (token) {
+      return this.makeAuthenticatedRequest(`/posts/${postId}`);
+    }
+    // Otherwise make public request
     return this.makeRequest(`/posts/${postId}`);
+  }
+
+  // Get current user's posts (including drafts)
+  async getMyPosts() {
+    return this.makeAuthenticatedRequest("/posts/my/posts");
+  }
+
+  // Get specific user's posts
+  async getUserPosts(userId) {
+    return this.makeAuthenticatedRequest(`/posts/user/${userId}/posts`);
   }
 
   // Create post

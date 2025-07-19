@@ -51,54 +51,52 @@ const AuthProvider = ({ children }) => {
   // Check if user is authenticated on app start
   useEffect(() => {
     const checkAuth = async () => {
-      const savedUser = getCookie("user");
-      const accessToken = authAPI.getAccessToken();
+      try {
+        const savedUser = getCookie("user");
+        const accessToken = authAPI.getAccessToken();
 
-      if (savedUser && accessToken) {
-        try {
-          // Parse the user data from cookie
-          const userData = JSON.parse(decodeURIComponent(savedUser));
+        if (!savedUser && !accessToken) {
+          // No saved auth data, user is not logged in
+          setLoading(false);
+          return;
+        }
 
-          // Verify that the user is still authenticated
-          const result = await authAPI.getCurrentUser();
-          if (result.success) {
+        // First, try to refresh the token to ensure we have a valid one
+        const refreshResult = await authAPI.refreshToken();
+
+        if (refreshResult.success) {
+          // Token refreshed successfully, now get current user data
+          const userResult = await authAPI.getCurrentUser();
+
+          if (userResult.success) {
+            const userData = userResult.data.user;
+            // Update the user cookie with fresh data
+            setCookie(
+              "user",
+              encodeURIComponent(JSON.stringify(userData)),
+              AUTH_CONFIG.getUserCookieExpiryInDays()
+            );
             setUser(userData);
             setIsAuthenticated(true);
           } else {
-            // Token might be expired, try to refresh
-            console.log("Access token expired, trying refresh...");
-            const refreshResult = await authAPI.refreshToken();
-            if (refreshResult.success) {
-              // Try to get user again with new token
-              const userResult = await authAPI.getCurrentUser();
-              if (userResult.success) {
-                const newUserData = userResult.data.user;
-                setCookie(
-                  "user",
-                  encodeURIComponent(JSON.stringify(newUserData)),
-                  1
-                );
-                setUser(newUserData);
-                setIsAuthenticated(true);
-              } else {
-                // Refresh worked but user fetch failed, clear data
-                deleteCookie("user");
-                authAPI.setAccessToken(null);
-              }
-            } else {
-              // Refresh failed, clear saved data
-              deleteCookie("user");
-              authAPI.setAccessToken(null);
-            }
+            // Couldn't get user data despite valid token
+            console.error("Failed to fetch user data");
+            deleteCookie("user");
+            authAPI.setAccessToken(null);
           }
-        } catch (error) {
-          // If error occurs, clear saved data
-          console.error(`Auth check error: ${error}`);
+        } else {
+          // Refresh token is invalid or expired
+          console.log("Session expired, please log in again");
           deleteCookie("user");
           authAPI.setAccessToken(null);
         }
+      } catch (error) {
+        console.error(`Auth check error: ${error}`);
+        deleteCookie("user");
+        authAPI.setAccessToken(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     checkAuth();
@@ -188,6 +186,27 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // Refresh user data (useful for updating user info after profile changes)
+  const refreshUserData = async () => {
+    try {
+      const result = await authAPI.getCurrentUser();
+      if (result.success) {
+        const userData = result.data.user;
+        setCookie(
+          "user",
+          encodeURIComponent(JSON.stringify(userData)),
+          AUTH_CONFIG.getUserCookieExpiryInDays()
+        );
+        setUser(userData);
+        return { success: true };
+      }
+      return { success: false, message: result.error };
+    } catch (error) {
+      console.error(`Refresh user data error: ${error}`);
+      return { success: false, message: "Failed to refresh user data" };
+    }
+  };
+
   const value = {
     user,
     isAuthenticated,
@@ -195,6 +214,7 @@ const AuthProvider = ({ children }) => {
     register,
     login,
     logout,
+    refreshUserData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

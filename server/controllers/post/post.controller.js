@@ -79,6 +79,9 @@ const getAllPosts = async (req, res, next) => {
 const getPost = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const userId = req.userId || null; // May be undefined for public access
+    const isAdmin = req.isAdmin || false;
+
     const post = await prisma.post.findUnique({
       where: { id: parseInt(id) },
       include: {
@@ -113,7 +116,7 @@ const getPost = async (req, res, next) => {
     }
 
     // If post is not published, only allow access to author or admin
-    if (!post.isPosted && req.userId !== post.userId && !req.isAdmin) {
+    if (!post.isPosted && userId !== post.userId && !isAdmin) {
       throw new CustomError(
         "Post not found",
         404,
@@ -148,7 +151,7 @@ const createPost = async (req, res, next) => {
       data: {
         title,
         content,
-        isPosted,
+        isPosted: Boolean(isPosted),
         userId,
       },
       include: {
@@ -156,6 +159,11 @@ const createPost = async (req, res, next) => {
           select: {
             id: true,
             username: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
           },
         },
       },
@@ -212,7 +220,7 @@ const updatePost = async (req, res, next) => {
 
     if (title !== undefined) updateData.title = title;
     if (content !== undefined) updateData.content = content;
-    if (isPosted !== undefined) updateData.isPosted = isPosted;
+    if (isPosted !== undefined) updateData.isPosted = Boolean(isPosted);
 
     const updatedPost = await prisma.post.update({
       where: { id: parseInt(id) },
@@ -222,6 +230,11 @@ const updatePost = async (req, res, next) => {
           select: {
             id: true,
             username: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
           },
         },
       },
@@ -323,6 +336,11 @@ const togglePostStatus = async (req, res, next) => {
             username: true,
           },
         },
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
       },
     });
 
@@ -339,6 +357,95 @@ const togglePostStatus = async (req, res, next) => {
   }
 };
 
+/*
+  8. GET USER'S POSTS (Including drafts for the authenticated user)
+*/
+const getUserPosts = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const requestingUserId = req.userId;
+    const isAdmin = req.isAdmin;
+
+    // Build the where clause based on who's requesting
+    const whereClause = {
+      userId: parseInt(userId),
+    };
+
+    // If the requesting user is not the owner and not an admin,
+    // only show published posts
+    if (parseInt(userId) !== requestingUserId && !isAdmin) {
+      whereClause.isPosted = true;
+    }
+
+    const posts = await prisma.post.findMany({
+      where: whereClause,
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.json({
+      success: true,
+      posts,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+/*
+  9. GET MY POSTS (Get all posts for the authenticated user - including drafts)
+*/
+const getMyPosts = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const posts = await prisma.post.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.json({
+      success: true,
+      posts,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export {
   getAllPublishedPosts,
   getAllPosts,
@@ -347,4 +454,6 @@ export {
   updatePost,
   deletePost,
   togglePostStatus,
+  getUserPosts,
+  getMyPosts,
 };

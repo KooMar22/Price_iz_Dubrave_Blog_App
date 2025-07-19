@@ -6,6 +6,8 @@ import {
   updatePost,
   deletePost,
   togglePostStatus,
+  getUserPosts,
+  getMyPosts
 } from "./post.controller.js";
 
 export {
@@ -16,4 +18,6 @@ export {
   updatePost,
   deletePost,
   togglePostStatus,
+  getMyPosts,
+  getUserPosts
 };

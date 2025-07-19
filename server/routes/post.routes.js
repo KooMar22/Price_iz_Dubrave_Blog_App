@@ -16,6 +16,8 @@ import {
   updatePost,
   deletePost,
   togglePostStatus,
+  getUserPosts,
+  getMyPosts,
 } from "../controllers/post/index.js";
 
 const router = Router();
@@ -25,6 +27,8 @@ router.get("/", getAllPublishedPosts);
 router.get("/:id", postIdValidator, getPost);
 
 // Protected routes (require authentication)
+router.get("/my/posts", requireAuthentication, getMyPosts);
+router.get("/user/:userId/posts", requireAuthentication, getUserPosts); 
 router.post("/", requireAuthentication, createPostValidator, createPost);
 router.put("/:id", requireAuthentication, updatePostValidator, updatePost);
 router.delete("/:id", requireAuthentication, postIdValidator, deletePost);
