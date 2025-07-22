@@ -69,7 +69,7 @@ const PostModal = ({ post, onClose }) => {
 
   // Handle comment deletion
   const handleDeleteComment = async (commentId) => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) {
+    if (!window.confirm("Jeste li sigurni da želite izbrisati komentar?")) {
       return;
     }
 

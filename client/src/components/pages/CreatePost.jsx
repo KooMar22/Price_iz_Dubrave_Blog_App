@@ -103,7 +103,7 @@ const CreatePost = () => {
       }
     } catch (error) {
       console.error("Save draft error:", error);
-      setErrors({ submit: "Failed to save draft" });
+      setErrors({ submit: "Nismo uspjeli sačuvati predložak" });
     } finally {
       setLoading(false);
     }
