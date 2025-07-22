@@ -17,9 +17,22 @@ const PORT = process.env.PORT;
 
 // CORS configuration
 const corsOptions = {
-  origin: [
-    process.env.FRONTEND_PORT,
-  ].filter(Boolean),
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      process.env.FRONTEND_PORT,
+      "https://price-iz-dubrave-blog-app.vercel.app", 
+      "http://localhost:5173", 
+    ].filter(Boolean);
+
+    console.log("Request origin:", origin);
+    console.log("Allowed origins:", allowedOrigins);
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
