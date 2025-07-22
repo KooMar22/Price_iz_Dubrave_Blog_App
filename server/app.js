@@ -8,6 +8,9 @@ import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 // Load environment variables from .env file
 dotenv.config();
 
+console.log("FRONTEND_PORT:", process.env.FRONTEND_PORT);
+console.log("All CORS origins:", [process.env.FRONTEND_PORT].filter(Boolean));
+
 // Set up express application
 const app = express();
 const PORT = process.env.PORT;
