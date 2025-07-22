@@ -41,7 +41,7 @@ export const sendPasswordResetEmail = async (email, resetToken, username) => {
         <h2 style="color: #333;">Zathjev za promjenom lozinke</h2>
         <p>Pozdrav ${username},</p>
         <p>Zatražili ste reset lozinke. Kako biste to učinili, molim kliknite na donju poveznicu:</p>
-        <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;">Reset Password</a>
+        <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;">Reset lozinke</a>
         <p>ili ju kopirajte u Vaš internetski preglednik:</p>
         <p style="word-break: break-all;">${resetUrl}</p>
         <p><strong>Ova poveznica isteći će za 15 minuta.</strong></p>
