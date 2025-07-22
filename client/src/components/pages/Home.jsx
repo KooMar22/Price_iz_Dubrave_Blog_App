@@ -18,11 +18,11 @@ const Home = () => {
         if (result.success) {
           setPosts(result.data.posts);
         } else {
-          setError("Failed to load posts");
+          setError("Nismo uspjeli dohvatiti priče. Pokušajte ponovno kasnije.");
         }
       } catch (err) {
         console.error("Error fetching posts:", err);
-        setError("Failed to load posts");
+        setError("Nismo usjeli dohvatiti priče. Pokušajte ponovno kasnije.");
       } finally {
         setLoading(false);
       }

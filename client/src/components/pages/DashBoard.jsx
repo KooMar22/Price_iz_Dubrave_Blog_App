@@ -53,7 +53,7 @@ const Dashboard = () => {
       setPosts(allPosts);
     } catch (err) {
       console.error(`Error fetching posts: ${err}`);
-      setError("Failed to load posts");
+      setError("Nismo uspjeli dohvatiti priče. Pokušajte ponovno kasnije.");
     } finally {
       setLoading(false);
     }
@@ -100,11 +100,11 @@ const Dashboard = () => {
         setPosts((prev) => prev.filter((p) => p.id !== deletingPost.id));
         setDeletingPost(null);
       } else {
-        setError("Failed to delete post");
+        setError("Nismo usjeli izbrisati priču. Pokušajte ponovno kasnije.");
       }
     } catch (err) {
       console.error(`Error deleting post: ${err}`);
-      setError("Failed to delete post");
+      setError("Nismo uspjeli izbrisati priču. Pokušajte ponovno kasnije.");
     } finally {
       setIsDeleting(false);
       setDeletingPost(null);
@@ -123,11 +123,11 @@ const Dashboard = () => {
           )
         );
       } else {
-        setError("Failed to update post status");
+        setError("Nismo uspjeli ažurirati status priče. Pokušajte ponovno kasnije.");
       }
     } catch (err) {
       console.error(`Error toggling post status: ${err}`);
-      setError("Failed to update post status");
+      setError("Nismo uspjeli ažurirati status priče. Pokušajte ponovno kasnije.");
     }
   };
 

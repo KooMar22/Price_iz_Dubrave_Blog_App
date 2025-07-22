@@ -60,7 +60,7 @@
 }
 
 .form-input {
-  width: 100%;
+  width: 350px;
   padding: calc(0.75rem + 0.25vw) calc(1rem + 0.25vw);
   border: 2px solid rgba(0, 123, 255, 0.2);
   border-radius: calc(8px + 0.2vw);
