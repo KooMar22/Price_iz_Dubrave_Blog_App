@@ -1,4 +1,4 @@
-# Priče iz Durave
+# Priče iz Dubrave
 
 This blog post app was created as an assignment within TheOdinProject.
 
