@@ -18,13 +18,11 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       process.env.FRONTEND_PORT,
-      "https://price-iz-dubrave-blog-app.vercel.app", 
-      "http://localhost:5173", 
+      "https://price-iz-dubrave-blog-app.vercel.app", // Production frontend URL
+      "http://localhost:5173", // Development frontend URL
     ].filter(Boolean);
 
-    console.log("Request origin:", origin);
-    console.log("Allowed origins:", allowedOrigins);
-
+    // Allow requests without origin (e.g. mobile apps, Postman)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
