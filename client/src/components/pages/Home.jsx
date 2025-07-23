@@ -42,14 +42,16 @@ const Home = () => {
         <p>
           Ovaj blog nastao je kao projektni zadatak u sklopu TheOdinProject-a
           (dio: autentifikacija i APIs), uz mala proširenja u smislu dodavanja
-          nekih funkcionalnosti
+          nekih funkcionalnosti.
         </p>
+        <br/>
         <p>
           Ne morate brinuti za svoje lozinke i tokene - oni su sigurno hashirani
           i pohranjeni u bazi. Za razliku od nekih državnih kompanija u
           energetskom sektoru, ja kao entuzijast ipak brinem o sigurnosti svojih
-          korisnika 😎
+          korisnika. 😎
         </p>
+        <br/>
         <p>Otkrijte i podijelite vaše priče, razmišljanja i iskustva...</p>
       </div>
 
