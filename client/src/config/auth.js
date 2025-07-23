@@ -9,6 +9,7 @@ const AUTH_CONFIG = {
     sameSite: "None",
     secure: true,
     path: "/",
+    partitioned: true,
   },
 
   // Helper functions

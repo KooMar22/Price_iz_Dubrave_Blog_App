@@ -22,6 +22,7 @@ const REFRESH_TOKEN = {
       secure: true,
       httpOnly: true,
       maxAge: parseJWTExpiry(process.env.AUTH_REFRESH_TOKEN_EXPIRY),
+      partitioned: true,
     },
   },
 };
@@ -35,6 +36,7 @@ const ACCESS_TOKEN = {
       secure: true,
       httpOnly: true,
       maxAge: parseJWTExpiry(process.env.AUTH_ACCESS_TOKEN_EXPIRY),
+      partitioned: true,
     },
   },
 };
