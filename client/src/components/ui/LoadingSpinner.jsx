@@ -1,6 +1,6 @@
 import "../../styles/LoadingSpinner.css";
 
-const LoadingSpinner = ({ size = "medium", message = "učitavanje..." }) => {
+const LoadingSpinner = ({ size = "medium", message = "Učitavanje..." }) => {
   return (
     <div className={`loading-container ${size}`}>
       <div className="spinner"></div>

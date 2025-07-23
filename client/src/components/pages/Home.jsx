@@ -39,6 +39,17 @@ const Home = () => {
     <div className="home-container">
       <div className="home-header">
         <h1>Dobro došli u Priče iz Dubrave</h1>
+        <p>
+          Ovaj blog nastao je kao projektni zadatak u sklopu TheOdinProject-a
+          (dio: autentifikacija i APIs), uz mala proširenja u smislu dodavanja
+          nekih funkcionalnosti
+        </p>
+        <p>
+          Ne morate brinuti za svoje lozinke i tokene - oni su sigurno hashirani
+          i pohranjeni u bazi. Za razliku od nekih državnih kompanija u
+          energetskom sektoru, ja kao entuzijast ipak brinem o sigurnosti svojih
+          korisnika 😎
+        </p>
         <p>Otkrijte i podijelite vaše priče, razmišljanja i iskustva...</p>
       </div>
 
