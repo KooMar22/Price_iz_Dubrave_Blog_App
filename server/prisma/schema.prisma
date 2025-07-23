@@ -56,8 +56,9 @@ model Post {
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments Comment[]
   @@map("posts")
-  @@index([userId, isPosted])
-  @@index([createdAt])
+  @@index([userId, isPosted])  
+  @@index([createdAt])         
+  @@index([isPosted])          
 }
 model Comment {
   id        Int      @id @default(autoincrement())
