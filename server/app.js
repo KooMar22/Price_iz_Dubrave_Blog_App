@@ -60,6 +60,14 @@ process.on("SIGINT", () => {
   process.exit(0);
 });
 
+// Trying to keep render alive
+if (process.env.NODE_ENV === "production") {
+  // Health check endpoint
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date() });
+  });
+};
+
 // Run the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
