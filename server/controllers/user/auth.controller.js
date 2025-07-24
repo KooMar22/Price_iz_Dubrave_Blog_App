@@ -154,6 +154,7 @@ const logout = async (req, res, next) => {
       sameSite: "None",
       secure: true,
       httpOnly: true,
+      partitioned: true,
     };
 
     // Destroy both cookies
@@ -187,6 +188,7 @@ const logoutAllDevices = async (req, res, next) => {
       sameSite: "None",
       secure: true,
       httpOnly: true,
+      partitioned: true,
     };
 
     // Destroy both cookies

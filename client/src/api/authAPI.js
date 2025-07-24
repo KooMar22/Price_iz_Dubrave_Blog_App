@@ -47,7 +47,15 @@ class AuthAPI {
         ...options,
       });
 
-      // Check if response is ok first
+      // Handle no content responses (204, 205)
+      if (response.status === 204 || response.status === 205) {
+        return {
+          success: true,
+          data: null,
+        };
+      }
+
+      // Check if response is ok
       if (!response.ok) {
         // Try to parse error response, but handle if it's not JSON
         let errorData;
