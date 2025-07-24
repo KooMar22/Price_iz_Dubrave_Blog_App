@@ -267,6 +267,7 @@
   }
 
   .auth-card {
+    width: 80%;
     padding: calc(1.5rem + 1vw);
     border-radius: calc(8px + 0.3vw);
   }
@@ -276,6 +277,7 @@
   }
 
   .form-input {
+    width: 300px;
     padding: calc(0.6rem + 0.2vw) calc(0.8rem + 0.2vw);
   }
 

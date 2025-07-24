@@ -222,10 +222,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(calc(350px + 5vw), 1fr));
   gap: calc(2rem + 1vw);
+  margin-bottom: calc(4rem + 2vw);
 }
 
 .post-card-wrapper {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .post-admin-actions {
@@ -284,6 +288,11 @@
     gap: calc(1.5rem + 0.5vw);
   }
 
+  .create-post-button {
+    width: 100%;
+    justify-content: center;
+  }
+
   .dashboard-actions {
     justify-content: center;
   }
@@ -299,12 +308,6 @@
 
   .posts-grid {
     grid-template-columns: 1fr;
-    justify-items: center;
     gap: calc(1.5rem + 0.5vw);
-  }
-
-  .create-post-button {
-    width: 100%;
-    justify-content: center;
   }
 }
